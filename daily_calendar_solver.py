@@ -4,12 +4,6 @@ import random
 from datetime import datetime
 
 
-# Entradas del usuario
-dia = st.selectbox("📅 Día del mes", list(range(1, 32)))
-mes = st.selectbox("🗓️ Mes", ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"])
-semana = st.selectbox("📆 Día de la semana", ["LUN", "MAR", "MIE", "JUE", "VIE", "SAB", "DOM"])
-lado = st.radio("🔄 ¿Qué lado de las piezas usar?", ["A", "B", "MIXTO"])
-modo = st.radio("🎯 ¿Qué deseas hacer?", ["Resolver", "Hint"])
 
 # Nivel del hint
 if modo == "Hint":
