@@ -1,5 +1,5 @@
 import streamlit as st
-from daily_calendar_solver import resolver_fecha, generar_hint
+"""from daily_calendar_solver import resolver_fecha, generar_hint"""
 
 st.set_page_config(page_title="Daily Calendar Puzzle Solver", layout="centered")
 st.title("🧩 Daily Calendar Puzzle Solver")
