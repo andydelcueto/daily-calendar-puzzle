@@ -1,3 +1,7 @@
+import matplotlib.pyplot as plt
+import copy
+import random
+from datetime import datetime
 
 
 # Entradas del usuario
