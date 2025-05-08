@@ -184,3 +184,13 @@ def generar_hint(dia, mes, semana, lado="A", nivel=1, guardar=False):
             break
 
     visualizar_solucion(ocupadas, libres, guardar, titulo=f"hint_nivel{nivel}")
+    
+if st.button("Ejecutar"):
+    if modo == "Resolver":
+        st.write("🔄 Buscando solución...")
+        resolver_fecha(dia, mes, semana, lado, guardar)
+        st.success("✅ Solución mostrada.")
+    else:
+        st.write(f"🔍 Generando hint nivel {nivel}...")
+        generar_hint(dia, mes, semana, lado, nivel, guardar)
+        st.success("✅ Hint generado.")
