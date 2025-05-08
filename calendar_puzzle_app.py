@@ -42,7 +42,7 @@ if st.button("Ejecutar"):
     if modo == "Resolver":
         st.write("🔄 Buscando solución...")
         resolver_fecha(dia, mes, semana, lado, guardar)
-        st.success("✅ Solución mostrada.")
+        
     else:
         st.write(f"🔍 Generando hint nivel {nivel}...")
         generar_hint(dia, mes, semana, lado, nivel, guardar)
