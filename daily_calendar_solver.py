@@ -116,20 +116,31 @@ def visualizar_solucion(ocupadas, libres, guardar=False, titulo="solucion"):
 
 # Función principal para resolver
 def resolver_fecha(dia, mes, semana, lado="A", guardar=False):
+    import streamlit as st
+
     libres = set([
         mapa_tablero.get(str(dia)),
         mapa_tablero.get(mes),
         mapa_tablero.get(semana)
     ])
+
     if lado == "MIXTO":
         piezas = [(nombre, forma) for nombre, forma in todas_las_piezas.items()]
     else:
         piezas = [(nombre, forma) for nombre, forma in todas_las_piezas.items() if lado in nombre]
+
     soluciones = []
+    st.write("🧠 Buscando solución...")
     resolver(set(), piezas, soluciones, len(mapa_tablero) - 3)
+
     if soluciones:
+        st.success(f"✅ Se encontró una solución. Mostrando...")
         visualizar_solucion(soluciones[0], libres, guardar, titulo="solucion")
+    else:
+        st.warning("⚠️ No se encontraron soluciones para esa fecha.")
+    
     return soluciones
+
 
 # Función para mostrar hint parcial
 def generar_hint(dia, mes, semana, lado="A", nivel=1, guardar=False):
