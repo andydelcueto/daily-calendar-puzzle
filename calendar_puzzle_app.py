@@ -1,4 +1,7 @@
 import streamlit as st
+import os
+st.write(\"Archivos en el directorio actual:\", os.listdir())
+
 from daily_calendar_solver import resolver_fecha, generar_hint
 
 st.title("🧩 Daily Calendar Puzzle Solver")
