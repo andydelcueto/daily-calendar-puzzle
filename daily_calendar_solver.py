@@ -111,24 +111,49 @@ def visualizar_solucion(ocupadas, libres, guardar=False, titulo="solucion"):
 
 def resolver_fecha(dia, mes, semana, lado="A", guardar=False):
     import streamlit as st
-    libres = set(filter(None, [
-        mapa_tablero.get(str(dia)),
-        mapa_tablero.get(mes),
-        mapa_tablero.get(semana)
-    ]))
+
+    st.header("🧩 Modo depuración de resolver_fecha")
+
+    # Coordenadas clave (día, mes, semana)
+    coord_dia = mapa_tablero.get(str(dia))
+    coord_mes = mapa_tablero.get(mes)
+    coord_semana = mapa_tablero.get(semana)
+
+    st.write("📍 Coordenadas clave:")
+    st.write(f"📅 Día ({dia}):", coord_dia)
+    st.write(f"🗓️ Mes ({mes}):", coord_mes)
+    st.write(f"📆 Semana ({semana}):", coord_semana)
+
+    libres = set(filter(None, [coord_dia, coord_mes, coord_semana]))
+
     if len(libres) != 3:
-        st.error("⚠️ Uno de los campos (día, mes o semana) no fue encontrado correctamente en el tablero.")
+        st.error("❌ Uno de los valores no fue encontrado en el tablero. Revisa tildes o formato.")
         return []
-    piezas = [(n, f) for n, f in todas_las_piezas.items()] if lado == "MIXTO" else \
-             [(n, f) for n, f in todas_las_piezas.items() if lado in n]
+
+    # Mostrar piezas utilizadas
+    if lado == "MIXTO":
+        piezas = [(n, f) for n, f in todas_las_piezas.items()]
+    else:
+        piezas = [(n, f) for n, f in todas_las_piezas.items() if lado in n]
+
+    st.write(f"🧩 Lado seleccionado: {lado}")
+    st.write("📦 Piezas utilizadas:", [n for n, _ in piezas])
+    st.write("🔲 Espacios disponibles en tablero:", len(mapa_tablero))
+    st.write("🔳 Espacios a cubrir:", len(mapa_tablero) - 3)
+
+    # Ejecutar resolver
     soluciones = []
     resolver(set(), piezas, soluciones, len(mapa_tablero) - 3)
+    st.write("✅ Total de soluciones encontradas:", len(soluciones))
+
     if soluciones:
-        st.success("✅ Se encontró una solución. Mostrando...")
+        st.success("✅ Se encontró al menos una solución. Mostrando la primera:")
         visualizar_solucion(soluciones[0], libres, guardar, titulo="solucion")
     else:
         st.warning("⚠️ No se encontraron soluciones para esa fecha.")
+
     return soluciones
+
 
 def generar_hint(dia, mes, semana, lado="A", nivel=1, guardar=False):
     import streamlit as st
