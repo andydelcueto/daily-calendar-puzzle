@@ -109,7 +109,7 @@ def visualizar_solucion(ocupadas, libres, guardar=False, titulo="solucion"):
         st.success(f"Imagen guardada como: {filename}")
     st.pyplot(fig)
 
-(""""def visualizar_solucion(ocupadas, libres, guardar=False, titulo="solucion"):
+"""def visualizar_solucion(ocupadas, libres, guardar=False, titulo="solucion"):
     fig, ax = plt.subplots(figsize=(6, 9))
     for y in range(FILAS):
         for x in range(COLUMNAS):
@@ -133,7 +133,7 @@ def visualizar_solucion(ocupadas, libres, guardar=False, titulo="solucion"):
         filename = f"{titulo}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
         plt.savefig(filename, bbox_inches='tight')
         print(f"Imagen guardada como: {filename}")
-    plt.show()"""")
+    plt.show()"""
 
 def resolver_fecha(dia, mes, semana, lado="A", guardar=False):
     libres = set([
