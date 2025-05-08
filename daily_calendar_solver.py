@@ -118,6 +118,12 @@ def visualizar_solucion(ocupadas, libres, guardar=False, titulo="solucion"):
 def resolver_fecha(dia, mes, semana, lado="A", guardar=False):
     import streamlit as st
 
+    import streamlit as st
+st.write("🧩 Coordenadas clave:")
+st.write("Día:", mapa_tablero.get(str(dia)))
+st.write("Mes:", mapa_tablero.get(mes))
+st.write("Semana:", mapa_tablero.get(semana))
+
     libres = set([
         mapa_tablero.get(str(dia)),
         mapa_tablero.get(mes),
