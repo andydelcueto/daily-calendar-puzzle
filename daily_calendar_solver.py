@@ -83,6 +83,33 @@ def resolver(tablero_ocupado, piezas_restantes, soluciones, espacios_libres):
                     tablero_ocupado.remove(coord)
 
 def visualizar_solucion(ocupadas, libres, guardar=False, titulo="solucion"):
+    import streamlit as st
+    fig, ax = plt.subplots(figsize=(6, 9))
+    for y in range(FILAS):
+        for x in range(COLUMNAS):
+            if tablero_2d[y][x] == "X":
+                continue
+            color = "white"
+            if (x, y) in ocupadas:
+                color = "skyblue"
+            elif (x, y) in libres:
+                color = "lightgreen"
+            rect = plt.Rectangle((x, y), 1, 1, facecolor=color, edgecolor="black")
+            ax.add_patch(rect)
+            ax.text(x + 0.5, y + 0.5, tablero_2d[y][x], ha="center", va="center", fontsize=8)
+    ax.set_xlim(0, COLUMNAS)
+    ax.set_ylim(0, FILAS)
+    ax.set_aspect('equal')
+    ax.axis('off')
+    plt.gca().invert_yaxis()
+    plt.title("Visualización de " + titulo)
+    if guardar:
+        filename = f"{titulo}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        plt.savefig(filename, bbox_inches='tight')
+        st.success(f"Imagen guardada como: {filename}")
+    st.pyplot(fig)
+
+(""""def visualizar_solucion(ocupadas, libres, guardar=False, titulo="solucion"):
     fig, ax = plt.subplots(figsize=(6, 9))
     for y in range(FILAS):
         for x in range(COLUMNAS):
@@ -106,7 +133,7 @@ def visualizar_solucion(ocupadas, libres, guardar=False, titulo="solucion"):
         filename = f"{titulo}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
         plt.savefig(filename, bbox_inches='tight')
         print(f"Imagen guardada como: {filename}")
-    plt.show()
+    plt.show()"""")
 
 def resolver_fecha(dia, mes, semana, lado="A", guardar=False):
     libres = set([
