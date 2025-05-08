@@ -1,12 +1,4 @@
-import streamlit as st
-"""from daily_calendar_solver import resolver_fecha, generar_hint"""
 
-
-st.title("🧩 Daily Calendar Puzzle Solver")
-
-st.markdown("""
-Selecciona una fecha, elige qué lado de las piezas usar y si quieres resolver el rompecabezas o recibir un *hint* (pista).  
-""")
 
 # Entradas del usuario
 dia = st.selectbox("📅 Día del mes", list(range(1, 32)))
