@@ -113,46 +113,41 @@ def visualizar_solucion(ocupadas, libres, guardar=False, titulo="solucion"):
 def resolver_fecha(dia, mes, semana, lado="A", guardar=False):
     import streamlit as st
 
-    st.header("🧩 Modo depuración de resolver_fecha")
-
-    # Coordenadas clave (día, mes, semana)
+    st.header("🧩 Buscando solución para:")
     coord_dia = mapa_tablero.get(str(dia))
     coord_mes = mapa_tablero.get(mes)
     coord_semana = mapa_tablero.get(semana)
 
-    st.write("📍 Coordenadas clave:")
-    st.write(f"📅 Día ({dia}):", coord_dia)
-    st.write(f"🗓️ Mes ({mes}):", coord_mes)
-    st.write(f"📆 Semana ({semana}):", coord_semana)
+    st.write(f"📅 Día: {dia} → {coord_dia}")
+    st.write(f"🗓️ Mes: {mes} → {coord_mes}")
+    st.write(f"📆 Semana: {semana} → {coord_semana}")
 
     libres = set(filter(None, [coord_dia, coord_mes, coord_semana]))
 
     if len(libres) != 3:
-        st.error("❌ Uno de los valores no fue encontrado en el tablero. Revisa tildes o formato.")
+        st.error("❌ Alguna coordenada no fue encontrada en el tablero. Revisa nombres, acentos o formato.")
         return []
 
-    # Mostrar piezas utilizadas
-    if lado == "MIXTO":
-        piezas = [(n, f) for n, f in todas_las_piezas.items()]
-    else:
-        piezas = [(n, f) for n, f in todas_las_piezas.items() if lado in n]
+    # Mezclar aleatoriamente A o B para cada pieza base (1 a 10)
+    seleccionadas = []
+    for i in range(1, 11):
+        lado_elegido = random.choice(["A", "B"]) if lado == "MIXTO" else lado
+        nombre = f"Pieza_{i}_{lado_elegido}"
+        forma = todas_las_piezas[nombre]
+        seleccionadas.append((nombre, forma))
 
-    st.write(f"🧩 Lado seleccionado: {lado}")
-    st.write("📦 Piezas utilizadas:", [n for n, _ in piezas])
-    st.write("🔲 Espacios disponibles en tablero:", len(mapa_tablero))
-    st.write("🔳 Espacios a cubrir:", len(mapa_tablero) - 3)
+    st.write("🧩 Piezas seleccionadas:", [n for n, _ in seleccionadas])
 
-    # Ejecutar resolver
     soluciones = []
-    resolver(set(), piezas, soluciones, len(mapa_tablero) - 3)
-    st.write("✅ Total de soluciones encontradas:", len(soluciones))
+    resolver(set(), seleccionadas, soluciones, len(mapa_tablero) - 3)
+
+    st.write("🔎 Total de soluciones encontradas:", len(soluciones))
 
     if soluciones:
         st.success("✅ Se encontró al menos una solución. Mostrando la primera:")
         visualizar_solucion(soluciones[0], libres, guardar, titulo="solucion")
     else:
-        st.warning("⚠️ No se encontraron soluciones para esa fecha.")
-
+        st.warning("⚠️ No se encontraron soluciones para esta combinación.")
     return soluciones
 
 
