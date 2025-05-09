@@ -112,43 +112,45 @@ def visualizar_solucion(ocupadas, libres, guardar=False, titulo="solucion"):
 
 def resolver_fecha(dia, mes, semana, lado="A", guardar=False):
     import streamlit as st
+    import itertools
 
-    st.header("🧩 Buscando solución para:")
+    st.header("🧩 Búsqueda exhaustiva de solución")
+
+    # Obtener coordenadas de los espacios a dejar libres
     coord_dia = mapa_tablero.get(str(dia))
     coord_mes = mapa_tablero.get(mes)
     coord_semana = mapa_tablero.get(semana)
 
-    st.write(f"📅 Día: {dia} → {coord_dia}")
-    st.write(f"🗓️ Mes: {mes} → {coord_mes}")
-    st.write(f"📆 Semana: {semana} → {coord_semana}")
+    st.write(f"📅 Día ({dia}): {coord_dia}")
+    st.write(f"🗓️ Mes ({mes}): {coord_mes}")
+    st.write(f"📆 Semana ({semana}): {coord_semana}")
 
     libres = set(filter(None, [coord_dia, coord_mes, coord_semana]))
-
     if len(libres) != 3:
-        st.error("❌ Alguna coordenada no fue encontrada en el tablero. Revisa nombres, acentos o formato.")
+        st.error("❌ Alguno de los valores no fue encontrado en el tablero.")
         return []
 
-    # Mezclar aleatoriamente A o B para cada pieza base (1 a 10)
-    seleccionadas = []
-    for i in range(1, 11):
-        lado_elegido = random.choice(["A", "B"]) if lado == "MIXTO" else lado
-        nombre = f"Pieza_{i}_{lado_elegido}"
-        forma = todas_las_piezas[nombre]
-        seleccionadas.append((nombre, forma))
+    # Generar todas las combinaciones posibles de A/B para 10 piezas
+    opciones = list(itertools.product(["A", "B"], repeat=10))
 
-    st.write("🧩 Piezas seleccionadas:", [n for n, _ in seleccionadas])
+    st.write("🔄 Probando combinaciones A/B (hasta 1024)...")
 
-    soluciones = []
-    resolver(set(), seleccionadas, soluciones, len(mapa_tablero) - 3)
+    for idx, combo in enumerate(opciones):
+        piezas_combo = []
+        for i, lado_ab in enumerate(combo, start=1):
+            nombre = f"Pieza_{i}_{lado_ab}"
+            piezas_combo.append((nombre, todas_las_piezas[nombre]))
 
-    st.write("🔎 Total de soluciones encontradas:", len(soluciones))
+        soluciones = []
+        resolver(set(), piezas_combo, soluciones, len(mapa_tablero) - 3)
 
-    if soluciones:
-        st.success("✅ Se encontró al menos una solución. Mostrando la primera:")
-        visualizar_solucion(soluciones[0], libres, guardar, titulo="solucion")
-    else:
-        st.warning("⚠️ No se encontraron soluciones para esta combinación.")
-    return soluciones
+        if soluciones:
+            st.success(f"✅ Solución encontrada con combinación #{idx + 1}: {[p[0] for p in piezas_combo]}")
+            visualizar_solucion(soluciones[0], libres, guardar, titulo="solucion")
+            return soluciones
+
+    st.warning("⚠️ Se probaron las 1024 combinaciones y no se encontró solución para esta fecha.")
+    return []
 
 
 def generar_hint(dia, mes, semana, lado="A", nivel=1, guardar=False):
